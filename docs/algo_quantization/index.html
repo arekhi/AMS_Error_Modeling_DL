@@ -1,0 +1,291 @@
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  
+  <link rel="shortcut icon" href="../img/favicon.ico">
+  <title>Quantization - Neural Network Distiller</title>
+  <link href='https://fonts.googleapis.com/css?family=Lato:400,700|Roboto+Slab:400,700|Inconsolata:400,700' rel='stylesheet' type='text/css'>
+
+  <link rel="stylesheet" href="../css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../css/theme_extra.css" type="text/css" />
+  <link rel="stylesheet" href="../css/highlight.css">
+  <link href="../extra.css" rel="stylesheet">
+  
+  <script>
+    // Current page data
+    var mkdocs_page_name = "Quantization";
+    var mkdocs_page_input_path = "algo_quantization.md";
+    var mkdocs_page_url = "/algo_quantization/index.html";
+  </script>
+  
+  <script src="../js/jquery-2.1.1.min.js"></script>
+  <script src="../js/modernizr-2.8.3.min.js"></script>
+  <script type="text/javascript" src="../js/highlight.pack.js"></script> 
+  
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side stickynav">
+      <div class="wy-side-nav-search">
+        <a href="../index.html" class="icon icon-home"> Neural Network Distiller</a>
+        <div role="search">
+  <form id ="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+  </form>
+</div>
+      </div>
+
+      <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+	<ul class="current">
+	  
+          
+            <li class="toctree-l1">
+		
+    <a class="" href="../index.html">Home</a>
+	    </li>
+          
+            <li class="toctree-l1">
+		
+    <a class="" href="../install/index.html">Installation</a>
+	    </li>
+          
+            <li class="toctree-l1">
+		
+    <a class="" href="../usage/index.html">Usage</a>
+	    </li>
+          
+            <li class="toctree-l1">
+		
+    <a class="" href="../schedule/index.html">Compression scheduling</a>
+	    </li>
+          
+            <li class="toctree-l1">
+		
+    <span class="caption-text">Compressing models</span>
+    <ul class="subnav">
+                <li class="">
+                    
+    <a class="" href="../pruning/index.html">Pruning</a>
+                </li>
+                <li class="">
+                    
+    <a class="" href="../regularization/index.html">Regularization</a>
+                </li>
+                <li class="">
+                    
+    <a class="" href="../quantization/index.html">Quantization</a>
+                </li>
+    </ul>
+	    </li>
+          
+            <li class="toctree-l1">
+		
+    <span class="caption-text">Algorithms</span>
+    <ul class="subnav">
+                <li class="">
+                    
+    <a class="" href="../algo_pruning/index.html">Pruning</a>
+                </li>
+                <li class=" current">
+                    
+    <a class="current" href="index.html">Quantization</a>
+    <ul class="subnav">
+            
+    <li class="toctree-l3"><a href="#quantization-algorithms">Quantization Algorithms</a></li>
+    
+        <ul>
+        
+            <li><a class="toctree-l4" href="#dorefa">DoReFa</a></li>
+        
+            <li><a class="toctree-l4" href="#pact">PACT</a></li>
+        
+            <li><a class="toctree-l4" href="#wrpn">WRPN</a></li>
+        
+            <li><a class="toctree-l4" href="#symmetric-linear-quantization">Symmetric Linear Quantization</a></li>
+        
+        </ul>
+    
+
+    </ul>
+                </li>
+    </ul>
+	    </li>
+          
+            <li class="toctree-l1">
+		
+    <a class="" href="../model_zoo/index.html">Model Zoo</a>
+	    </li>
+          
+            <li class="toctree-l1">
+		
+    <a class="" href="../jupyter/index.html">Jupyter notebooks</a>
+	    </li>
+          
+            <li class="toctree-l1">
+		
+    <a class="" href="../design/index.html">Design</a>
+	    </li>
+          
+        </ul>
+      </div>
+      &nbsp;
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+        <a href="../index.html">Neural Network Distiller</a>
+      </nav>
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href="../index.html">Docs</a> &raquo;</li>
+    
+      
+        
+          <li>Algorithms &raquo;</li>
+        
+      
+    
+    <li>Quantization</li>
+    <li class="wy-breadcrumbs-aside">
+      
+    </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main">
+            <div class="section">
+              
+                <h1 id="quantization-algorithms">Quantization Algorithms</h1>
+<p>The following quantization methods are currently implemented in Distiller:</p>
+<h2 id="dorefa">DoReFa</h2>
+<p>(As proposed in <a href="https://arxiv.org/abs/1606.06160">DoReFa-Net: Training Low Bitwidth Convolutional Neural Networks with Low Bitwidth Gradients</a>)  </p>
+<p>In this method, we first define the quantization function <script type="math/tex">quantize_k</script>, which takes a real value <script type="math/tex">a_f \in [0, 1]</script> and outputs a discrete-valued <script type="math/tex">a_q \in \left\{ \frac{0}{2^k-1}, \frac{1}{2^k-1}, ... , \frac{2^k-1}{2^k-1} \right\}</script>, where <script type="math/tex">k</script> is the number of bits used for quantization.</p>
+<p>
+<script type="math/tex; mode=display">a_q = quantize_k(a_f) = \frac{1}{2^k-1} round \left( \left(2^k - 1 \right) a_f \right)</script>
+</p>
+<p>Activations are clipped to the <script type="math/tex">[0, 1]</script> range and then quantized as follows:</p>
+<p>
+<script type="math/tex; mode=display">x_q = quantize_k(x_f)</script>
+</p>
+<p>For weights, we define the following function <script type="math/tex">f</script>, which takes an unbounded real valued input and outputs a real value in <script type="math/tex">[0, 1]</script>:</p>
+<p>
+<script type="math/tex; mode=display">f(w) = \frac{tanh(w)}{2 max(|tanh(w)|)} + \frac{1}{2} </script>
+</p>
+<p>Now we can use <script type="math/tex">quantize_k</script> to get quantized weight values, as follows:</p>
+<p>
+<script type="math/tex; mode=display">w_q = 2 quantize_k \left( f(w_f) \right) - 1</script>
+</p>
+<p>This method requires training the model with quantization, as discussed <a href="../quantization/index.html#training-with-quantization">here</a>. Use the <code>DorefaQuantizer</code> class to transform an existing model to a model suitable for training with quantization using DoReFa.</p>
+<h3 id="notes">Notes:</h3>
+<ul>
+<li>Gradients quantization as proposed in the paper is not supported yet.</li>
+<li>The paper defines special handling for binary weights which isn't supported in Distiller yet.</li>
+</ul>
+<h2 id="pact">PACT</h2>
+<p>(As proposed in <a href="https://arxiv.org/abs/1805.06085">PACT: Parameterized Clipping Activation for Quantized Neural Networks</a>)</p>
+<p>This method is similar to DoReFa, but the upper clipping values, <script type="math/tex">\alpha</script>, of the activation functions are learned parameters instead of hard coded to 1. Note that per the paper's recommendation, <script type="math/tex">\alpha</script> is shared per layer.</p>
+<p>This method requires training the model with quantization, as discussed <a href="../quantization/#training-with-quantization">here</a>. Use the <code>PACTQuantizer</code> class to transform an existing model to a model suitable for training with quantization using PACT.</p>
+<h2 id="wrpn">WRPN</h2>
+<p>(As proposed in <a href="https://arxiv.org/abs/1709.01134">WRPN: Wide Reduced-Precision Networks</a>)  </p>
+<p>In this method, activations are clipped to <script type="math/tex">[0, 1]</script> and quantized as follows (<script type="math/tex">k</script> is the number of bits used for quantization):</p>
+<p>
+<script type="math/tex; mode=display">x_q = \frac{1}{2^k-1} round \left( \left(2^k - 1 \right) x_f \right)</script>
+</p>
+<p>Weights are clipped to <script type="math/tex">[-1, 1]</script> and quantized as follows:</p>
+<p>
+<script type="math/tex; mode=display">w_q = \frac{1}{2^{k-1}-1} round \left( \left(2^{k-1} - 1 \right)w_f \right)</script>
+</p>
+<p>Note that <script type="math/tex">k-1</script> bits are used to quantize weights, leaving one bit for sign.</p>
+<p>This method requires training the model with quantization, as discussed <a href="../quantization/#training-with-quantization">here</a>. Use the <code>WRPNQuantizer</code> class to transform an existing model to a model suitable for training with quantization using WRPN.</p>
+<h3 id="notes_1">Notes:</h3>
+<ul>
+<li>The paper proposed widening of layers as a means to reduce accuracy loss. This isn't implemented as part of <code>WRPNQuantizer</code> at the moment. To experiment with this, modify your model implementation to have wider layers.</li>
+<li>The paper defines special handling for binary weights which isn't supported in Distiller yet.</li>
+</ul>
+<h2 id="symmetric-linear-quantization">Symmetric Linear Quantization</h2>
+<p>In this method, a float value is quantized by multiplying with a numeric constant (the <strong>scale factor</strong>), hence it is <strong>Linear</strong>. We use a signed integer to represent the quantized range, with no quantization bias (or "offset") used. As a result, the floating-point range considered for quantization is <strong>symmetric</strong> with respect to zero.<br />
+In the current implementation the scale factor is chosen so that the entire range of the floating-point tensor is quantized (we do not attempt to remove outliers).<br />
+Let us denote the original floating-point tensor by <script type="math/tex">x_f</script>, the quantized tensor by <script type="math/tex">x_q</script>, the scale factor by <script type="math/tex">q_x</script> and the number of bits used for quantization by <script type="math/tex">n</script>. Then, we get:
+<script type="math/tex; mode=display">q_x = \frac{2^{n-1}-1}{\max|x|}</script>
+<script type="math/tex; mode=display">x_q = round(q_x x_f)</script>
+(The <script type="math/tex">round</script> operation is round-to-nearest-integer)  </p>
+<p>Let's see how a <strong>convolution</strong> or <strong>fully-connected (FC)</strong> layer is quantized using this method: (we denote input, output, weights and bias with  <script type="math/tex">x, y, w</script> and <script type="math/tex">b</script> respectively)
+<script type="math/tex; mode=display">y_f = \sum{x_f w_f} + b_f = \sum{\frac{x_q}{q_x} \frac{w_q}{q_w}} + \frac{b_q}{q_b} = \frac{1}{q_x q_w} \left( \sum { x_q w_q + \frac{q_x q_w}{q_b}b_q } \right)</script>
+<script type="math/tex; mode=display">y_q = round(q_y y_f) = round\left(\frac{q_y}{q_x q_w} \left( \sum { x_q w_q + \frac{q_x q_w}{q_b}b_q } \right) \right) </script>
+Note how the bias has to be re-scaled to match the scale of the summation.</p>
+<h3 id="implementation">Implementation</h3>
+<p>We've implemented <strong>convolution</strong> and <strong>FC</strong> using this method.  </p>
+<ul>
+<li>They are implemented by wrapping the existing PyTorch layers with quantization and de-quantization operations. That is - the computation is done on floating-point tensors, but the values themselves are restricted to integer values. The wrapper is implemented in the <code>RangeLinearQuantParamLayerWrapper</code> class.  </li>
+<li>All other layers are unaffected and are executed using their original FP32 implementation.  </li>
+<li>To automatically transform an existing model to a quantized model using this method, use the <code>SymmetricLinearQuantizer</code> class.</li>
+<li>For weights and bias the scale factor is determined once at quantization setup ("offline"), and for activations it is determined dynamically at runtime ("online").  </li>
+<li><strong>Important note:</strong> Currently, this method is implemented as <strong>inference only</strong>, with no back-propagation functionality. Hence, it can only be used to quantize a pre-trained FP32 model, with no re-training. As such, using it with <script type="math/tex">n < 8</script> is likely to lead to severe accuracy degradation for any non-trivial workload.</li>
+</ul>
+              
+            </div>
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="../model_zoo/index.html" class="btn btn-neutral float-right" title="Model Zoo">Next <span class="icon icon-circle-arrow-right"></span></a>
+      
+      
+        <a href="../algo_pruning/index.html" class="btn btn-neutral" title="Pruning"><span class="icon icon-circle-arrow-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <!-- Copyright etc -->
+    
+  </div>
+
+  Built with <a href="http://www.mkdocs.org">MkDocs</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>.
+</footer>
+      
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+
+  <div class="rst-versions" role="note" style="cursor: pointer">
+    <span class="rst-current-version" data-toggle="rst-current-version">
+      
+      
+        <span><a href="../algo_pruning/index.html" style="color: #fcfcfc;">&laquo; Previous</a></span>
+      
+      
+        <span style="margin-left: 15px"><a href="../model_zoo/index.html" style="color: #fcfcfc">Next &raquo;</a></span>
+      
+    </span>
+</div>
+    <script>var base_url = '..';</script>
+    <script src="../js/theme.js"></script>
+      <script src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS_HTML"></script>
+      <script src="../search/require.js"></script>
+      <script src="../search/search.js"></script>
+
+</body>
+</html>
